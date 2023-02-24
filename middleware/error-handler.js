@@ -1,6 +1,21 @@
-const errorHandlerMiddleware = (err, req, res, next) => {
-  console.log(err);
-  res.status(500).json({ msg: "There was an error" });
-};
+import { StatusCodes } from 'http-status-codes'
 
-export default errorHandlerMiddleware;
+const errorHandlerMiddleware = (err, req, res, next) => {
+    console.log(err);
+    const defaultError = {
+        statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
+        msg: err.message || 'Something went wrong, please, try again later.'
+    }
+    if (err.name === 'ValidationError') {
+        defaultError.statusCode = StatusCodes.BAD_REQUEST,
+            defaultError.msg = Object.values(err.errors).map((error) => error.message).join('. ')
+    }
+    // If unique field is filled with already used data
+    if (err.code && err.code === 11000) {
+        defaultError.statusCode = StatusCodes.BAD_REQUEST,
+            defaultError.msg = `${Object.keys(err.keyValue)} field has to be unique. ${Object.values(err.keyValue)} is already in use.`
+    }
+    res.status(defaultError.statusCode).json(defaultError.msg)
+}
+
+export default errorHandlerMiddleware
