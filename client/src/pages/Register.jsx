@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useNavigate } from 'react-router-dom'
 import styled from "styled-components"
 import { Logo, FormRow, Alert } from "../components"
 import { useAppContext } from "../context/appContext"
@@ -10,9 +11,9 @@ const initialState = {
   isMember: true,
 }
 const Register = () => {
+  const navigate = useNavigate()
   const [values, setValues] = useState(initialState)
-
-  const { isLoading, showAlert, displayAlert } = useAppContext()
+  const { user, isLoading, showAlert, displayAlert, registerUser } = useAppContext()
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value })
@@ -25,12 +26,21 @@ const Register = () => {
       displayAlert()
       return
     }
-    console.log(values);
+    const currentUser = { name, email, password }
+    if (isMember) {
+      console.log('Already a member');
+    } else {
+      registerUser(currentUser)
+    }
   }
 
   const toggleMember = () => {
     setValues({ ...values, isMember: !values.isMember })
   }
+
+  useEffect(() => {
+    if (user) setTimeout(() => { navigate('/') }, 2000);
+  }, [user, navigate])
 
   return (
     <Wrapper>
@@ -41,7 +51,7 @@ const Register = () => {
         {!values.isMember && (<FormRow type='text' name='name' labelText='Nome' value={values.name} handleChange={handleChange} />)}
         <FormRow type='email' name='email' labelText='E-mail' value={values.email} handleChange={handleChange} />
         <FormRow type='password' name='password' labelText='Senha' value={values.password} handleChange={handleChange} />
-        <button type="submit" className="btn">Enviar</button>
+        <button type="submit" className="btn" disabled={isLoading}>Enviar</button>
         <p>
           {values.isMember ? 'Não é membro? ' : 'Já tem cadastro? '}
           <button type="button" onClick={toggleMember} className='member-btn'>{values.isMember ? 'Cadastrar' : 'Login'}</button>
