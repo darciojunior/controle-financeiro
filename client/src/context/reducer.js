@@ -10,10 +10,10 @@ const reducer = (state, action) => {
   if (action.type === "CLEAR_ALERT") {
     return { ...state, showAlert: false, alertType: "", alertText: "" };
   }
-  if (action.type === "REGISTER_USER_BEGIN") {
+  if (action.type === "SETUP_USER_BEGIN") {
     return { ...state, isLoading: true };
   }
-  if (action.type === "REGISTER_USER_SUCCESS") {
+  if (action.type === "SETUP_USER_SUCCESS") {
     return {
       ...state,
       isLoading: false,
@@ -21,12 +21,13 @@ const reducer = (state, action) => {
       user: action.payload.user,
       showAlert: true,
       alertType: "success",
-      alertText: "Usuário criado com sucesso. Redirecionando...",
+      alertText: action.payload.alertText,
     };
   }
-  if (action.type === "REGISTER_USER_ERROR") {
+  if (action.type === "SETUP_USER_ERROR") {
     return {
       ...state,
+      isLoading: false,
       showAlert: true,
       alertType: "danger",
       alertText: action.payload.msg,
