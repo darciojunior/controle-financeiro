@@ -1,6 +1,6 @@
-import Dashboard from "./Dashboard";
 import ErrorPage from "./ErrorPage";
 import Landing from "./Landing";
 import Register from "./Register";
+import ProtectedLayout from "./ProtectedLayout";
 
-export { Dashboard, ErrorPage, Landing, Register };
+export { ErrorPage, Landing, Register, ProtectedLayout };

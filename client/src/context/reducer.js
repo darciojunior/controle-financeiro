@@ -1,3 +1,5 @@
+import { initialState } from "./appContext";
+
 const reducer = (state, action) => {
   if (action.type === "DISPLAY_ALERT") {
     return {
@@ -32,6 +34,12 @@ const reducer = (state, action) => {
       alertType: "danger",
       alertText: action.payload.msg,
     };
+  }
+  if (action.type === "TOGGLE_SIDEBAR") {
+    return { ...state, showSidebar: !state.showSidebar };
+  }
+  if (action.type === "LOGOUT_USER") {
+    return { ...initialState, user: "", token: "" };
   }
 
   throw new Error(`no such action: ${action.type}`);
