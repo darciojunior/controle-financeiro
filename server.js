@@ -9,10 +9,12 @@ import connectDB from "./db/connect.js";
 
 //routers
 import authRouter from "./routes/authRoutes.js";
+import financeRouter from "./routes/financesRoutes.js";
 
 //middleware
 import errorHandlerMiddleware from "./middleware/error-handler.js";
 import notFoundMiddleware from "./middleware/not-found.js";
+import authenticateUser from "./middleware/auth.js";
 
 app.use(express.json());
 
@@ -21,6 +23,7 @@ app.get("/api/v1", (req, res) => {
 });
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/finances", authenticateUser, financeRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

@@ -19,6 +19,7 @@ const register = async (req, res, next) => {
     .status(StatusCodes.CREATED)
     .json({ user: { name: user.name, email: user.email }, token });
 };
+
 const login = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password)
@@ -35,8 +36,20 @@ const login = async (req, res) => {
   user.password = undefined;
   res.status(StatusCodes.OK).json({ user, token });
 };
-const updateUser = (req, res) => {
-  res.send("update user user");
+
+const updateUser = async (req, res) => {
+  const { email, name } = req.body;
+  if (!name || !email) throw new BadRequestError("Verifique campos vazios.");
+
+  const user = await User.findOne({ _id: req.user.userId });
+  user.email = email;
+  user.name = name;
+
+  await user.save();
+  const token = user.createJWT();
+  res
+    .status(StatusCodes.OK)
+    .json({ user, token });
 };
 
 export { register, login, updateUser };
