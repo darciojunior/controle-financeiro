@@ -41,6 +41,29 @@ const reducer = (state, action) => {
   if (action.type === "LOGOUT_USER") {
     return { ...initialState, user: "", token: "" };
   }
+  if (action.type === "UPDATE_USER_BEGIN") {
+    return { ...state, isLoading: true };
+  }
+  if (action.type === "UPDATE_USER_SUCCESS") {
+    return {
+      ...state,
+      isLoading: false,
+      token: action.payload.token,
+      user: action.payload.user,
+      showAlert: true,
+      alertType: "success",
+      alertText: 'Usuário atualizado com sucesso!',
+    };
+  }
+  if (action.type === "UPDATE_USER_ERROR") {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "danger",
+      alertText: action.payload.msg,
+    };
+  }
 
   throw new Error(`no such action: ${action.type}`);
 };

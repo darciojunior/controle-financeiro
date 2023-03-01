@@ -8,6 +8,7 @@ const register = async (req, res, next) => {
   if (!name || !email || !password)
     throw new BadRequestError("Verifique campos vazios.");
   if (name.length < 3) throw new BadRequestError("Nome é muito curto.");
+  if (name.length > 30) throw new BadRequestError("Nome não pode ter mais que 30 caracteres.");
   if (password.length < 6) throw new BadRequestError("Senha é muito curta.");
 
   const emailAlreadyUsed = await User.findOne({ email });
@@ -40,6 +41,8 @@ const login = async (req, res) => {
 const updateUser = async (req, res) => {
   const { email, name } = req.body;
   if (!name || !email) throw new BadRequestError("Verifique campos vazios.");
+  if (name.length < 3) throw new BadRequestError("Nome é muito curto.");
+  if (name.length > 30) throw new BadRequestError("Nome não pode ter mais que 30 caracteres.");
 
   const user = await User.findOne({ _id: req.user.userId });
   user.email = email;

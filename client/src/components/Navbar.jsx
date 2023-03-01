@@ -19,7 +19,7 @@ const Navbar = () => {
                 <div className="btn-container">
                     <button type="button" className='btn' onClick={() => setShowLogout(!showLogout)}>
                         <FaUserCircle />
-                        {user?.name}
+                        {user?.name.split(' ')[0]}
                         <FaCaretDown />
                     </button>
                     <div className={showLogout ? "dropdown show-dropdown" : "dropdown"} >
@@ -81,7 +81,6 @@ const Wrapper = styled.nav`
     background: #a6f7a6;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    padding: 0.5rem;
     text-align: center;
     visibility: hidden;
     border-radius: .25rem;
@@ -90,6 +89,8 @@ const Wrapper = styled.nav`
     visibility: visible;
   }
   .dropdown-btn {
+    width: 100%;
+    height: 2.5rem;
     background: transparent;
     border-color: transparent;
     color: #0C380C;
