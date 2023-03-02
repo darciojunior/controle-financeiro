@@ -1,5 +1,15 @@
+import { StatusCodes } from "http-status-codes";
+import Finance from "../models/Finance.js";
+import { BadRequestError, NotFoundError } from "../errors/index.js";
+
 const createFinance = async (req, res) => {
-  res.send("create finance");
+  const { financeValue } = req.body;
+
+  if (!financeValue) throw new BadRequestError("Verifique campos vazios.");
+
+  req.body.createdBy = req.user.userId;
+  const finance = await Finance.create(req.body);
+  res.status(StatusCodes.CREATED).json({ finance });
 };
 const getAllFinances = async (req, res) => {
   res.send("get all finances");

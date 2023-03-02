@@ -11,11 +11,28 @@ import {
   UPDATE_USER_BEGIN,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_ERROR,
+  HANDLE_CHANGE,
+  CLEAR_VALUES,
+  CREATE_FINANCE_BEGIN,
+  CREATE_FINANCE_SUCCESS,
+  CREATE_FINANCE_ERROR,
 } from "./actions";
 import reducer from "./reducer";
 
 const user = localStorage.getItem("user");
 const token = localStorage.getItem("token");
+
+function formatDate(date) {
+  var d = new Date(date),
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-");
+}
 
 const initialState = {
   isLoading: false,
@@ -25,6 +42,30 @@ const initialState = {
   user: user ? JSON.parse(user) : null,
   token: token,
   showSidebar: false,
+  isEditing: false,
+  editFinanceId: "",
+  financeType: "Receita",
+  incomeTypeOptions: [
+    "Salário",
+    "13º salário",
+    "Férias",
+    "Investimentos",
+    "Outros",
+  ],
+  incomeType: "Salário",
+  expenseTypeOptions: [
+    "Alimentação",
+    "Contas",
+    "Habitação",
+    "Lazer",
+    "Saúde",
+    "Transporte",
+    "Outros",
+  ],
+  expenseType: "Outros",
+  description: "",
+  financeValue: "",
+  financeDate: formatDate(new Date()),
 };
 
 const AppContext = React.createContext();
@@ -125,6 +166,46 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+  const handleChange = ({ name, value }) => {
+    dispatch({ type: HANDLE_CHANGE, payload: { name, value } });
+  };
+
+  const clearValues = () => {
+    dispatch({ type: CLEAR_VALUES });
+  };
+
+  const createFinance = async () => {
+    dispatch({ type: CREATE_FINANCE_BEGIN });
+    try {
+      const {
+        financeType,
+        incomeType,
+        expenseType,
+        description,
+        financeValue,
+        financeDate,
+      } = state;
+      await authFetch.post("/finances", {
+        financeType,
+        incomeType,
+        expenseType,
+        description,
+        financeValue,
+        financeDate,
+      });
+      dispatch({ type: CREATE_FINANCE_SUCCESS });
+      dispatch({ type: CLEAR_VALUES });
+    } catch (error) {
+      if (error.response.status !== 401) {
+        dispatch({
+          type: CREATE_FINANCE_ERROR,
+          payload: { msg: error.response.data },
+        });
+      }
+    }
+    clearAlert()
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -134,6 +215,9 @@ const AppProvider = ({ children }) => {
         toggleSidebar,
         logoutUser,
         updateUser,
+        handleChange,
+        clearValues,
+        createFinance
       }}
     >
       {children}

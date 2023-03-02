@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { FaTimes } from 'react-icons/fa'
 import { useAppContext } from '../context/appContext'
 import Logo from './Logo'
 import NavLinks from './NavLinks'
@@ -51,6 +50,12 @@ const Wrapper = styled.aside`
       display: flex;
       flex-direction: column;
     }
+    .nav-links:hover > .nav-link {
+      background-color: #e2e6eb;
+    }
+    .nav-links:hover > .nav-link:not(:hover) {
+      background-color: #FFF;
+    }
     .nav-link {
       display: flex;
       align-items: center;
@@ -61,12 +66,8 @@ const Wrapper = styled.aside`
       transition: 0.3s ease-in-out all;
     }
     .nav-link:hover {
-      background: #f0f4f8;
       padding-left: 3rem;
       color: #000;
-    }
-    .nav-link:hover ~ .active {
-      background: #FFF;
     }
     .nav-link:hover .icon {
       color: #125812;
@@ -80,7 +81,7 @@ const Wrapper = styled.aside`
     }
     .active {
       color: #102a43;
-      background: #f0f4f8;
+      background: #e2e6eb;
     }
     .active .icon {
       color: #125812;

@@ -21,7 +21,7 @@ const Profile = () => {
   return (
     <Wrapper>
       <form className="form" onSubmit={handleSubmit}>
-        <h3>profile</h3>
+        <h3>Perfil</h3>
         {showAlert && <Alert />}
         <div className="form-center">
           <FormRow type='text' name='name' labelText='Nome' value={name} handleChange={(e) => setName(e.target.value)} />
@@ -35,8 +35,6 @@ const Profile = () => {
   )
 }
 
-
-
 const Wrapper = styled.section`
   border-radius: .25rem;
   width: 100%;
@@ -45,6 +43,7 @@ const Wrapper = styled.section`
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   h3 {
     margin-top: 0;
+    text-align: center;
   }
   .form {
     margin: 0;

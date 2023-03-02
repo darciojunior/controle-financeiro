@@ -52,10 +52,64 @@ const reducer = (state, action) => {
       user: action.payload.user,
       showAlert: true,
       alertType: "success",
-      alertText: 'Usuário atualizado com sucesso!',
+      alertText: "Usuário atualizado com sucesso!",
     };
   }
   if (action.type === "UPDATE_USER_ERROR") {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "danger",
+      alertText: action.payload.msg,
+    };
+  }
+  if (action.type === "HANDLE_CHANGE") {
+    return {
+      ...state,
+      [action.payload.name]: action.payload.value,
+    };
+  }
+  if (action.type === "CLEAR_VALUES") {
+    function formatDate(date) {
+      var d = new Date(date),
+        month = "" + (d.getMonth() + 1),
+        day = "" + d.getDate(),
+        year = d.getFullYear();
+
+      if (month.length < 2) month = "0" + month;
+      if (day.length < 2) day = "0" + day;
+
+      return [year, month, day].join("-");
+    }
+
+    const initialState = {
+      isEditing: false,
+      editFinanceId: "",
+      incomeType: "Salário",
+      expenseType: "Outros",
+      description: "",
+      financeValue: "",
+      financeDate: formatDate(new Date()),
+    };
+    return {
+      ...state,
+      ...initialState,
+    };
+  }
+  if (action.type === "CREATE_FINANCE_BEGIN") {
+    return { ...state, isLoading: true };
+  }
+  if (action.type === "CREATE_FINANCE_SUCCESS") {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "success",
+      alertText: "Finança adicionada com sucesso!",
+    };
+  }
+  if (action.type === "CREATE_FINANCE_ERROR") {
     return {
       ...state,
       isLoading: false,
