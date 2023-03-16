@@ -23,7 +23,7 @@ const Navbar = () => {
                         <FaCaretDown />
                     </button>
                     <div className={showLogout ? "dropdown show-dropdown" : "dropdown"} >
-                        <button type='button' className='dropdown-btn' onClick={logoutUser}>logout</button>
+                        <button type='button' className='dropdown-btn' onClick={logoutUser}>Sair</button>
                     </div>
                 </div>
             </div>
@@ -104,6 +104,7 @@ const Wrapper = styled.nav`
   }
   @media (min-width: 992px) {
     position: sticky;
+    z-index: 9999;
     top: 0;
 
     .nav-center {

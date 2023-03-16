@@ -5,6 +5,7 @@ import Navbar from "./Navbar";
 import SmallSidebar from "./SmallSidebar";
 import BigSidebar from "./BigSidebar";
 import FormRowSelect from "./FormRowSelect";
+import FinancesContainer from "./FinancesContainer";
 
 export {
   Logo,
@@ -14,4 +15,5 @@ export {
   Navbar,
   SmallSidebar,
   BigSidebar,
+  FinancesContainer,
 };

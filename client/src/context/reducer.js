@@ -118,6 +118,18 @@ const reducer = (state, action) => {
       alertText: action.payload.msg,
     };
   }
+  if (action.type === "GET_FINANCES_BEGIN") {
+    return { ...state, isLoading: true, showAlert: false };
+  }
+  if (action.type === "GET_FINANCES_SUCCESS") {
+    return {
+      ...state,
+      isLoading: false,
+      finances: action.payload.finances,
+      totalFinances: action.payload.totalFinances,
+      numOfPages: action.payload.numOfPages,
+    };
+  }
 
   throw new Error(`no such action: ${action.type}`);
 };

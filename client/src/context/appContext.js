@@ -16,6 +16,8 @@ import {
   CREATE_FINANCE_BEGIN,
   CREATE_FINANCE_SUCCESS,
   CREATE_FINANCE_ERROR,
+  GET_FINANCES_BEGIN,
+  GET_FINANCES_SUCCESS,
 } from "./actions";
 import reducer from "./reducer";
 
@@ -66,6 +68,10 @@ const initialState = {
   description: "",
   financeValue: "",
   financeDate: formatDate(new Date()),
+  finances: [],
+  totalFinances: 0,
+  numOfPages: 1,
+  page: 1,
 };
 
 const AppContext = React.createContext();
@@ -203,7 +209,32 @@ const AppProvider = ({ children }) => {
         });
       }
     }
-    clearAlert()
+    clearAlert();
+  };
+
+  const getFinances = async () => {
+    let url = `/finances`;
+
+    dispatch({ type: GET_FINANCES_BEGIN });
+    try {
+      const { data } = await authFetch(url);
+      const { finances, totalFinances, numOfPages } = data;
+      dispatch({
+        type: GET_FINANCES_SUCCESS,
+        payload: { finances, totalFinances, numOfPages },
+      });
+    } catch (error) {
+      console.log(error.response);
+      //logoutUser()
+    }
+    clearAlert();
+  };
+
+  const setEditFinance = (id) => {
+    console.log(`set edit: ${id}`);
+  };
+  const DeleteFinance = (id) => {
+    console.log(`delete: ${id}`);
   };
 
   return (
@@ -217,7 +248,10 @@ const AppProvider = ({ children }) => {
         updateUser,
         handleChange,
         clearValues,
-        createFinance
+        createFinance,
+        getFinances,
+        setEditFinance,
+        DeleteFinance,
       }}
     >
       {children}

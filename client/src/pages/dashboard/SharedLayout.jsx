@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom"
 import styled from 'styled-components'
 import { Navbar, SmallSidebar, BigSidebar } from '../../components'
 

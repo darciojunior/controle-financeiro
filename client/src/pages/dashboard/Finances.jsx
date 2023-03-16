@@ -1,9 +1,30 @@
-import { FormRow, FormRowSelect, Alert } from '../../components'
+import { FormRow, FormRowSelect, Alert, FinancesContainer } from '../../components'
 import { useAppContext } from '../../context/appContext'
 import styled from 'styled-components'
+import { useState } from 'react'
 
 const Finances = () => {
-  const { isEditing, isLoading, showAlert, displayAlert, financeType, incomeTypeOptions, incomeType, expenseTypeOptions, expenseType, description, financeValue, financeDate, handleChange, clearValues, createFinance } = useAppContext()
+  const { isEditing,
+    isLoading,
+    showAlert,
+    displayAlert,
+    financeType,
+    incomeTypeOptions,
+    incomeType,
+    expenseTypeOptions,
+    expenseType,
+    description,
+    financeValue,
+    financeDate,
+    handleChange,
+    clearValues,
+    createFinance } = useAppContext()
+
+  //Usado apenas para dar Refresh no FinancesContainer quando alguma finança nova for adicionada
+  const [seed, setSeed] = useState(1)
+  const reset = () => {
+    setSeed(Math.random())
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -13,6 +34,7 @@ const Finances = () => {
     }
     if (isEditing) return
     createFinance()
+    reset()
   }
 
   const handleInput = (e) => {
@@ -62,7 +84,7 @@ const Finances = () => {
             value={(financeType === 'Receita') ? incomeType : expenseType}
             handleChange={handleInput}
             list={(financeType === 'Receita') ? incomeTypeOptions : expenseTypeOptions} />
-          <FormRow type='text' name='description' labelText='Descrição' value={description} handleChange={handleInput} />
+          <FormRow type='text' name='description' labelText='Descrição (opcional)' value={description} handleChange={handleInput} />
           <FormRow type='text' name='financeValue' labelText='Valor' value={financeValue} handleChange={handleInput} />
           <FormRow type='date' name='financeDate' labelText='Data' value={financeDate} handleChange={handleInput} />
 
@@ -79,6 +101,7 @@ const Finances = () => {
           </div>
         </div>
       </form>
+      <FinancesContainer key={seed}/>
     </Wrapper>
   )
 }
@@ -98,7 +121,6 @@ const Wrapper = styled.section`
     left: 50%;
     transform: translateX(-50%)
   }
-
   .income {
     background-color: #0f5132;
     color: #FFF;
@@ -128,7 +150,7 @@ const Wrapper = styled.section`
     margin-top: 0;
   }
   .form {
-    margin: 0;
+    margin: 0 0 2rem 0;
     border-radius: 0;
     box-shadow: none;
     padding: 0;

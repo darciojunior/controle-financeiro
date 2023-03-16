@@ -11,9 +11,14 @@ const createFinance = async (req, res) => {
   const finance = await Finance.create(req.body);
   res.status(StatusCodes.CREATED).json({ finance });
 };
+
 const getAllFinances = async (req, res) => {
-  res.send("get all finances");
+  const finances = await Finance.find({ createdBy: req.user.userId });
+  res
+    .status(StatusCodes.OK)
+    .json({ finances, totalFinances: finances.length, numOfPages: 1 });
 };
+
 const updateFinance = async (req, res) => {
   res.send("update finance");
 };
