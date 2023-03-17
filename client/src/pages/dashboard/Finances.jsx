@@ -18,7 +18,8 @@ const Finances = () => {
     financeDate,
     handleChange,
     clearValues,
-    createFinance } = useAppContext()
+    createFinance,
+    editFinance } = useAppContext()
 
   //Usado apenas para dar Refresh no FinancesContainer quando alguma finança nova for adicionada
   const [seed, setSeed] = useState(1)
@@ -32,7 +33,11 @@ const Finances = () => {
       displayAlert()
       return
     }
-    if (isEditing) return
+    if (isEditing) {
+      editFinance()
+      reset()
+      return
+    }
     createFinance()
     reset()
   }
@@ -101,7 +106,7 @@ const Finances = () => {
           </div>
         </div>
       </form>
-      <FinancesContainer key={seed}/>
+      <FinancesContainer key={seed} />
     </Wrapper>
   )
 }

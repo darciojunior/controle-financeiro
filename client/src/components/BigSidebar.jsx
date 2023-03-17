@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { useAppContext } from '../context/appContext'
 import Logo from './Logo'
+import { NavLink } from "react-router-dom";
 import NavLinks from './NavLinks'
 
 const BigSidebar = () => {
@@ -10,7 +11,9 @@ const BigSidebar = () => {
       <div className={showSidebar ? 'sidebar-container' : 'sidebar-container show-sidebar'}>
         <div className="content">
           <header>
-            <Logo />
+            <NavLink to='/' className={({ isActive }) => isActive ? "logo-navlink" : "logo-navlink"}>
+              <Logo />
+            </NavLink>
           </header>
           <NavLinks />
         </div>
@@ -71,6 +74,9 @@ const Wrapper = styled.aside`
     }
     .nav-link:hover .icon {
       color: #125812;
+    }
+    .logo-navlink {
+      width: 100%;
     }
     .icon {
       font-size: 1.5rem;

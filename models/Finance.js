@@ -29,7 +29,7 @@ const FinanceSchema = new Schema(
     },
     description: {
       type: String,
-      maxlength: 100,
+      maxlength: 200,
     },
     financeValue: {
       type: String,

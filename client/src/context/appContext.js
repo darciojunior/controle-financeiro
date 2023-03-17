@@ -18,6 +18,11 @@ import {
   CREATE_FINANCE_ERROR,
   GET_FINANCES_BEGIN,
   GET_FINANCES_SUCCESS,
+  SET_EDIT_FINANCE,
+  DELETE_FINANCE_BEGIN,
+  EDIT_FINANCE_BEGIN,
+  EDIT_FINANCE_SUCCESS,
+  EDIT_FINANCE_ERROR,
 } from "./actions";
 import reducer from "./reducer";
 
@@ -224,17 +229,67 @@ const AppProvider = ({ children }) => {
         payload: { finances, totalFinances, numOfPages },
       });
     } catch (error) {
-      console.log(error.response);
-      //logoutUser()
+      logoutUser();
     }
     clearAlert();
   };
 
   const setEditFinance = (id) => {
-    console.log(`set edit: ${id}`);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+    dispatch({ type: SET_EDIT_FINANCE, payload: { id } });
   };
-  const DeleteFinance = (id) => {
-    console.log(`delete: ${id}`);
+
+  const editFinance = async () => {
+    dispatch({ type: EDIT_FINANCE_BEGIN });
+    try {
+      const {
+        financeType,
+        incomeType,
+        expenseType,
+        financeValue,
+        financeDate,
+        description,
+      } = state;
+      if (financeType === "Receita") {
+        await authFetch.patch(`/finances/${state.editFinanceId}`, {
+          financeType,
+          incomeType,
+          financeValue,
+          financeDate,
+          description,
+        });
+      } else {
+        await authFetch.patch(`/finances/${state.editFinanceId}`, {
+          financeType,
+          expenseType,
+          financeValue,
+          financeDate,
+          description,
+        });
+      }
+      dispatch({ type: EDIT_FINANCE_SUCCESS });
+      dispatch({ type: CLEAR_VALUES });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: EDIT_FINANCE_ERROR,
+        payload: { msg: error.response.data },
+      });
+    }
+    clearAlert();
+  };
+
+  const DeleteFinance = async (id) => {
+    dispatch({ type: DELETE_FINANCE_BEGIN });
+    try {
+      await authFetch.delete(`/finances/${id}`);
+      getFinances();
+    } catch (error) {
+      logoutUser();
+    }
   };
 
   return (
@@ -251,6 +306,7 @@ const AppProvider = ({ children }) => {
         createFinance,
         getFinances,
         setEditFinance,
+        editFinance,
         DeleteFinance,
       }}
     >

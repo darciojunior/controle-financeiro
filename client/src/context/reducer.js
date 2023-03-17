@@ -1,6 +1,18 @@
 import { initialState } from "./appContext";
 
 const reducer = (state, action) => {
+  function formatDate(date) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+  }
+
   if (action.type === "DISPLAY_ALERT") {
     return {
       ...state,
@@ -71,18 +83,6 @@ const reducer = (state, action) => {
     };
   }
   if (action.type === "CLEAR_VALUES") {
-    function formatDate(date) {
-      var d = new Date(date),
-        month = "" + (d.getMonth() + 1),
-        day = "" + d.getDate(),
-        year = d.getFullYear();
-
-      if (month.length < 2) month = "0" + month;
-      if (day.length < 2) day = "0" + day;
-
-      return [year, month, day].join("-");
-    }
-
     const initialState = {
       isEditing: false,
       editFinanceId: "",
@@ -128,6 +128,56 @@ const reducer = (state, action) => {
       finances: action.payload.finances,
       totalFinances: action.payload.totalFinances,
       numOfPages: action.payload.numOfPages,
+    };
+  }
+  if (action.type === "SET_EDIT_FINANCE") {
+    const finance = state.finances.find(
+      (finance) => finance._id === action.payload.id
+    );
+    const {
+      _id,
+      financeType,
+      incomeType,
+      expenseType,
+      financeValue,
+      financeDate,
+      description,
+    } = finance;
+
+    return {
+      ...state,
+      isEditing: true,
+      editFinanceId: _id,
+      financeType,
+      incomeType,
+      expenseType,
+      financeValue,
+      financeDate: formatDate(financeDate),
+      description,
+    };
+  }
+  if (action.type === "DELETE_FINANCE_BEGIN") {
+    return { ...state };
+  }
+  if (action.type === "EDIT_FINANCE_BEGIN") {
+    return { ...state, isLoading: true };
+  }
+  if (action.type === "EDIT_FINANCE_SUCCESS") {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "success",
+      alertText: "Finança atualizada com sucesso!",
+    };
+  }
+  if (action.type === "EDIT_FINANCE_ERROR") {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "danger",
+      alertText: action.payload.msg,
     };
   }
 
