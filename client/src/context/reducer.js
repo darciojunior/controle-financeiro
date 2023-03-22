@@ -180,6 +180,15 @@ const reducer = (state, action) => {
       alertText: action.payload.msg,
     };
   }
+  if (action.type === "CLEAR_FILTERS") {
+    return {
+      ...state,
+      searchFinanceType: "Mostrar todos",
+      searchIncomeType: "Mostrar todos",
+      searchExpenseType: "Mostrar todos",
+      searchFinanceDate: "",
+    };
+  }
 
   throw new Error(`no such action: ${action.type}`);
 };

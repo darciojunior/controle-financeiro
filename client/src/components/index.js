@@ -10,6 +10,7 @@ import AnualStatsContainer from "./AnualStatsContainer";
 import AnualStatsItem from "./AnualStatsItem";
 import MonthlyStatsContainer from "./MonthlyStatsContainer";
 import MonthlyStatsItem from "./MonthlyStatsItem";
+import SearchContainer from "./SearchContainer";
 
 export {
   Logo,
@@ -24,4 +25,5 @@ export {
   AnualStatsItem,
   MonthlyStatsContainer,
   MonthlyStatsItem,
+  SearchContainer,
 };

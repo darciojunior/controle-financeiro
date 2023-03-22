@@ -1,4 +1,4 @@
-import { FormRow, FormRowSelect, Alert, FinancesContainer } from '../../components'
+import { FormRow, FormRowSelect, Alert, FinancesContainer, SearchContainer } from '../../components'
 import { useAppContext } from '../../context/appContext'
 import styled from 'styled-components'
 import { useState } from 'react'
@@ -23,6 +23,7 @@ const Finances = () => {
 
   //Usado apenas para dar Refresh no FinancesContainer quando alguma finança nova for adicionada
   const [seed, setSeed] = useState(1)
+  const [showFilter, setShowFilter] = useState(false)
   const reset = () => {
     setSeed(Math.random())
   }
@@ -67,6 +68,10 @@ const Finances = () => {
     handleChange({ name, value })
   }
 
+  const toggleFilter = () => {
+    setShowFilter(!showFilter)
+  }
+
   return (
     <Wrapper>
       <div className="change-finance-container">
@@ -106,6 +111,10 @@ const Finances = () => {
           </div>
         </div>
       </form>
+      <div className="btn-filter-container">
+        <button className="btn btn-filter" onClick={toggleFilter}>{(showFilter) ? 'Esconder Filtro' : 'Filtrar'}</button>
+      </div>
+      {showFilter && <SearchContainer />}
       <FinancesContainer key={seed} />
     </Wrapper>
   )
@@ -192,7 +201,21 @@ const Wrapper = styled.section`
     background: #627d98;
   }
   .clear-btn:hover {
-    background: #000;
+    background: #304255;
+  }
+  .btn-filter-container {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .btn-filter {
+    background-color: transparent;
+    border-radius: 50px;
+    border: 1px solid #125812;
+    color: #125812;
+  }
+  .btn-filter:hover {
+    background-color: #125812;
+    color: #FFF; 
   }
   @media (min-width: 700px) {
     .change-finance-container {

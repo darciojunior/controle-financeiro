@@ -4,11 +4,11 @@ import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa'
 import { useAppContext } from '../context/appContext'
 
 const FinancesContainer = () => {
-    const { getFinances, finances, totalFinances, page, setEditFinance, DeleteFinance } = useAppContext()
+    const { getFinances, finances, totalFinances, page, setEditFinance, DeleteFinance, searchFinanceType, searchIncomeType, searchExpenseType, searchFinanceDate } = useAppContext()
     useEffect(() => {
         getFinances()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [searchFinanceType, searchIncomeType, searchExpenseType, searchFinanceDate])
 
     if (finances.length === 0) return <div><h2>Não há finanças para exibir...</h2></div>
 

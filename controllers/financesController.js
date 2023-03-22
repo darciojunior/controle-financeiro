@@ -6,7 +6,9 @@ import checkPermissions from "../utils/checkPermissions.js";
 const createFinance = async (req, res) => {
   const { financeValue } = req.body;
 
-  let convertToNumber = parseFloat(financeValue.replace(/\./g, "").replace(",", "."));
+  let convertToNumber = parseFloat(
+    financeValue.replace(/\./g, "").replace(",", ".")
+  );
 
   if (!financeValue) throw new BadRequestError("Verifique campos vazios.");
   if (convertToNumber === 0 || convertToNumber < 0)
@@ -17,7 +19,29 @@ const createFinance = async (req, res) => {
 };
 
 const getAllFinances = async (req, res) => {
-  const finances = await Finance.find({ createdBy: req.user.userId });
+  const { financeType, incomeType, expenseType, financeDate } = req.query;
+
+  const queryObject = {
+    createdBy: req.user.userId,
+  };
+
+  if (financeType !== "Mostrar todos") {
+    queryObject.financeType = financeType;
+  }
+  if (incomeType !== "Mostrar todos") {
+    queryObject.incomeType = incomeType;
+  }
+  if (expenseType !== "Mostrar todos") {
+    queryObject.expenseType = expenseType;
+  }
+  if (financeDate !== "") {
+    queryObject.financeDate = financeDate;
+  }
+  
+  let result = Finance.find(queryObject);
+
+  const finances = await result;
+
   res
     .status(StatusCodes.OK)
     .json({ finances, totalFinances: finances.length, numOfPages: 1 });

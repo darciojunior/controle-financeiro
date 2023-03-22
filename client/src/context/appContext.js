@@ -23,6 +23,7 @@ import {
   EDIT_FINANCE_BEGIN,
   EDIT_FINANCE_SUCCESS,
   EDIT_FINANCE_ERROR,
+  CLEAR_FILTERS,
 } from "./actions";
 import reducer from "./reducer";
 
@@ -77,6 +78,10 @@ const initialState = {
   totalFinances: 0,
   numOfPages: 1,
   page: 1,
+  searchFinanceType: "Mostrar todos",
+  searchIncomeType: "Mostrar todos",
+  searchExpenseType: "Mostrar todos",
+  searchFinanceDate: "",
 };
 
 const AppContext = React.createContext();
@@ -218,8 +223,8 @@ const AppProvider = ({ children }) => {
   };
 
   const getFinances = async () => {
-    let url = `/finances`;
-
+    const {searchFinanceType, searchIncomeType, searchExpenseType, searchFinanceDate} = state
+    let url = `/finances?financeType=${searchFinanceType}&incomeType=${searchIncomeType}&expenseType=${searchExpenseType}&financeDate=${searchFinanceDate}`;
     dispatch({ type: GET_FINANCES_BEGIN });
     try {
       const { data } = await authFetch(url);
@@ -292,6 +297,10 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  const clearFilters = () => {
+    dispatch({ type: CLEAR_FILTERS });
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -308,6 +317,7 @@ const AppProvider = ({ children }) => {
         setEditFinance,
         editFinance,
         DeleteFinance,
+        clearFilters,
       }}
     >
       {children}
