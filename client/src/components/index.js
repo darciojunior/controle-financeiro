@@ -6,6 +6,10 @@ import SmallSidebar from "./SmallSidebar";
 import BigSidebar from "./BigSidebar";
 import FormRowSelect from "./FormRowSelect";
 import FinancesContainer from "./FinancesContainer";
+import AnualStatsContainer from "./AnualStatsContainer";
+import AnualStatsItem from "./AnualStatsItem";
+import MonthlyStatsContainer from "./MonthlyStatsContainer";
+import MonthlyStatsItem from "./MonthlyStatsItem";
 
 export {
   Logo,
@@ -16,4 +20,8 @@ export {
   SmallSidebar,
   BigSidebar,
   FinancesContainer,
+  AnualStatsContainer,
+  AnualStatsItem,
+  MonthlyStatsContainer,
+  MonthlyStatsItem,
 };

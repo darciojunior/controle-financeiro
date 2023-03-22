@@ -6,8 +6,11 @@ import checkPermissions from "../utils/checkPermissions.js";
 const createFinance = async (req, res) => {
   const { financeValue } = req.body;
 
-  if (!financeValue) throw new BadRequestError("Verifique campos vazios.");
+  let convertToNumber = parseFloat(financeValue.replace(/\./g, "").replace(",", "."));
 
+  if (!financeValue) throw new BadRequestError("Verifique campos vazios.");
+  if (convertToNumber === 0 || convertToNumber < 0)
+    throw new BadRequestError("Valor não pode ser menor ou igual a 0.");
   req.body.createdBy = req.user.userId;
   const finance = await Finance.create(req.body);
   res.status(StatusCodes.CREATED).json({ finance });
@@ -47,8 +50,8 @@ const deleteFinance = async (req, res) => {
 
   checkPermissions(req.user, finance.createdBy);
 
-  await finance.remove()
-  res.status(StatusCodes.OK).json({ msg: 'Sucesso. Finança removida.' });
+  await finance.remove();
+  res.status(StatusCodes.OK).json({ msg: "Sucesso. Finança removida." });
 };
 
 const showStats = async (req, res) => {

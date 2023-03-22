@@ -40,7 +40,7 @@ const FinancesContainer = () => {
                         return (
                             <tr key={finance._id}>
                                 <td data-title='Categoria' className={(finance.financeType === 'Receita' ? 'bg-green' : 'bg-red')}>{finance.financeType} - {finance.incomeType}{finance.expenseType}</td>
-                                <td data-title='Valor' className={(finance.financeType === 'Despesa' ? 'color-red' : '')}>{(finance.financeType === 'Despesa' ? `- ${finance.financeValue}` : finance.financeValue)}</td>
+                                <td data-title='Valor' className={(finance.financeType === 'Despesa' ? 'color-red' : '')}>{(finance.financeType === 'Despesa' ? `- R$ ${finance.financeValue}` : `R$ ${finance.financeValue}`)}</td>
                                 <td data-title='Data'>{`${finance.financeDate.slice(8, 10)}/${finance.financeDate.slice(5, 7)}/${finance.financeDate.slice(0, 4)}`}</td>
                                 <td data-title='Descrição'>{finance.description}</td>
                                 <td data-title='Ações'>

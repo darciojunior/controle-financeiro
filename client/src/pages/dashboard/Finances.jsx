@@ -58,7 +58,7 @@ const Finances = () => {
     const result = new Intl.NumberFormat('pt-BR', options).format(
       parseFloat(value) / 100
     )
-    return 'R$ ' + result
+    return result
   }
 
   const toggleFinance = (value) => {
