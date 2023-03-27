@@ -2,9 +2,21 @@ import styled from 'styled-components'
 import { useEffect } from 'react'
 import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa'
 import { useAppContext } from '../context/appContext'
+import PaginationContainer from './PaginationContainer'
+
 
 const FinancesContainer = () => {
-    const { getFinances, finances, totalFinances, page, setEditFinance, DeleteFinance, searchFinanceType, searchIncomeType, searchExpenseType, searchFinanceDate } = useAppContext()
+    const { getFinances,
+        finances,
+        totalFinances,
+        page,
+        setEditFinance,
+        DeleteFinance,
+        searchFinanceType,
+        searchIncomeType,
+        searchExpenseType,
+        searchFinanceDate,
+        numOfPages } = useAppContext()
     useEffect(() => {
         getFinances()
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -36,7 +48,7 @@ const FinancesContainer = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {finances.map((finance) => {
+                    {finances.slice((page - 1) * 15, ((page - 1) * 15) + 15).map((finance) => {
                         return (
                             <tr key={finance._id}>
                                 <td data-title='Categoria' className={(finance.financeType === 'Receita' ? 'bg-green' : 'bg-red')}>{finance.financeType} - {finance.incomeType}{finance.expenseType}</td>
@@ -54,6 +66,7 @@ const FinancesContainer = () => {
                     })}
                 </tbody>
             </table>
+            {numOfPages > 1 && <PaginationContainer />}
         </Wrapper>
     )
 }
@@ -91,6 +104,7 @@ td {
     white-space: nowrap;
 }
 td:nth-child(4) {
+    width: 50%;
     text-align: start;
     white-space: normal;
 }
@@ -128,6 +142,9 @@ td:nth-child(4) {
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         margin-bottom: 1rem;
     }
+    tr:nth-child(even) {
+        background-color: #FFF;
+    }
     td {
         padding: .5rem;
         text-align: start;
@@ -138,6 +155,9 @@ td:nth-child(4) {
     }
     td:nth-child(even) {
         background-color: rgba(0, 0, 0, 0.05);
+    }
+    td:nth-child(4) {
+        width: 100%;
     }
     td:last-child {
         display: flex;

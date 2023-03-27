@@ -22,7 +22,7 @@ const Navbar = () => {
         <div className="btn-container">
           <button type="button" className='btn' onClick={() => setShowLogout(!showLogout)}>
             <FaUserCircle />
-            Olá, {user?.name.split(' ')[0]}
+            {user?.name.split(' ')[0]}
             <FaCaretDown />
           </button>
           <div className={showLogout ? "dropdown show-dropdown" : "dropdown"} >

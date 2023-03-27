@@ -189,6 +189,12 @@ const reducer = (state, action) => {
       searchFinanceDate: "",
     };
   }
+  if (action.type === "SET_PAGE") {
+    return {
+      ...state,
+      page: action.payload.pageNumber
+    }
+  }
 
   throw new Error(`no such action: ${action.type}`);
 };

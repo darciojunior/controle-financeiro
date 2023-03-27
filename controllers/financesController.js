@@ -21,30 +21,22 @@ const createFinance = async (req, res) => {
 const getAllFinances = async (req, res) => {
   const { financeType, incomeType, expenseType, financeDate } = req.query;
 
-  const queryObject = {
-    createdBy: req.user.userId,
-  };
+  const queryObject = { createdBy: req.user.userId };
 
-  if (financeType !== "Mostrar todos") {
-    queryObject.financeType = financeType;
-  }
-  if (incomeType !== "Mostrar todos") {
-    queryObject.incomeType = incomeType;
-  }
-  if (expenseType !== "Mostrar todos") {
-    queryObject.expenseType = expenseType;
-  }
-  if (financeDate !== "") {
-    queryObject.financeDate = financeDate;
-  }
-  
+  if (financeType !== "Mostrar todos") queryObject.financeType = financeType;
+  if (incomeType !== "Mostrar todos") queryObject.incomeType = incomeType;
+  if (expenseType !== "Mostrar todos") queryObject.expenseType = expenseType;
+  if (financeDate !== "") queryObject.financeDate = financeDate;
+
   let result = Finance.find(queryObject);
 
+  const limit = Number(req.query.limit) || 15;
   const finances = await result;
 
-  res
-    .status(StatusCodes.OK)
-    .json({ finances, totalFinances: finances.length, numOfPages: 1 });
+  const totalFinances = await Finance.countDocuments(queryObject);
+  const numOfPages = Math.ceil(totalFinances / limit);
+
+  res.status(StatusCodes.OK).json({ finances, totalFinances, numOfPages });
 };
 
 const updateFinance = async (req, res) => {

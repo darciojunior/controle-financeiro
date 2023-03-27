@@ -24,6 +24,7 @@ import {
   EDIT_FINANCE_SUCCESS,
   EDIT_FINANCE_ERROR,
   CLEAR_FILTERS,
+  SET_PAGE,
 } from "./actions";
 import reducer from "./reducer";
 
@@ -223,7 +224,12 @@ const AppProvider = ({ children }) => {
   };
 
   const getFinances = async () => {
-    const {searchFinanceType, searchIncomeType, searchExpenseType, searchFinanceDate} = state
+    const {
+      searchFinanceType,
+      searchIncomeType,
+      searchExpenseType,
+      searchFinanceDate,
+    } = state;
     let url = `/finances?financeType=${searchFinanceType}&incomeType=${searchIncomeType}&expenseType=${searchExpenseType}&financeDate=${searchFinanceDate}`;
     dispatch({ type: GET_FINANCES_BEGIN });
     try {
@@ -301,6 +307,10 @@ const AppProvider = ({ children }) => {
     dispatch({ type: CLEAR_FILTERS });
   };
 
+  const setPage = (pageNumber) => {
+    dispatch({ type: SET_PAGE, payload: { pageNumber } });
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -318,6 +328,7 @@ const AppProvider = ({ children }) => {
         editFinance,
         DeleteFinance,
         clearFilters,
+        setPage,
       }}
     >
       {children}

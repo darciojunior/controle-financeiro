@@ -99,7 +99,7 @@ const Finances = () => {
           <FormRow type='date' name='financeDate' labelText='Data' value={financeDate} handleChange={handleInput} />
 
           <div className="btn-container">
-            <button type='submit' className='btn' onClick={handleSubmit} disabled={isLoading}>Salvar</button>
+            <button type='submit' className='btn btn-submit' onClick={handleSubmit} disabled={isLoading}>Salvar</button>
             <button className="btn clear-btn" disabled={isLoading}
               onClick={(e) => {
                 e.preventDefault()
@@ -111,7 +111,7 @@ const Finances = () => {
           </div>
         </div>
       </form>
-      <div className="btn-filter-container">
+      <div className="btn-filter-container" id='table-container'>
         <button className="btn btn-filter" onClick={toggleFilter}>{(showFilter) ? 'Esconder Filtro' : 'Filtrar'}</button>
       </div>
       {showFilter && <SearchContainer />}
@@ -186,6 +186,9 @@ const Wrapper = styled.section`
     align-self: end;
     height: 35px;
     margin-top: 1rem;
+  }
+  .btn-submit:hover {
+    background-color: #0b350b;
   }
   .btn-container {
     display: grid;
