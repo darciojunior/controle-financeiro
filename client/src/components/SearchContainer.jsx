@@ -5,7 +5,7 @@ import { useState, useMemo } from 'react'
 
 const SearchContainer = () => {
     const { isLoading, searchFinanceType, searchIncomeType, searchExpenseType, handleChange, clearFilters, incomeTypeOptions, expenseTypeOptions } = useAppContext()
-    const [localSearchFinanceDate, setLocalSearchFinanceDate] = useState(new Date(0))
+    const [localSearchFinanceDate, setLocalSearchFinanceDate] = useState('')
 
     const handleSearch = (e) => {
         handleChange({ name: e.target.name, value: e.target.value })

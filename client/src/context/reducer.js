@@ -31,7 +31,6 @@ const reducer = (state, action) => {
     return {
       ...state,
       isLoading: false,
-      token: action.payload.token,
       user: action.payload.user,
       showAlert: true,
       alertType: "success",
@@ -51,7 +50,7 @@ const reducer = (state, action) => {
     return { ...state, showSidebar: !state.showSidebar };
   }
   if (action.type === "LOGOUT_USER") {
-    return { ...initialState, user: "", token: "" };
+    return { ...initialState, userLoading: false };
   }
   if (action.type === "UPDATE_USER_BEGIN") {
     return { ...state, isLoading: true };
@@ -60,7 +59,6 @@ const reducer = (state, action) => {
     return {
       ...state,
       isLoading: false,
-      token: action.payload.token,
       user: action.payload.user,
       showAlert: true,
       alertType: "success",
@@ -74,6 +72,20 @@ const reducer = (state, action) => {
       showAlert: true,
       alertType: "danger",
       alertText: action.payload.msg,
+    };
+  }
+  if (action.type === "GET_CURRENT_USER_BEGIN") {
+    return {
+      ...state,
+      userLoading: true,
+      showAlert: false,
+    };
+  }
+  if (action.type === "GET_CURRENT_USER_SUCCESS") {
+    return {
+      ...state,
+      userLoading: false,
+      user: action.payload.user,
     };
   }
   if (action.type === "HANDLE_CHANGE") {
@@ -159,6 +171,15 @@ const reducer = (state, action) => {
   if (action.type === "DELETE_FINANCE_BEGIN") {
     return { ...state };
   }
+  if (action.type === "DELETE_FINANCE_ERROR") {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "danger",
+      alertText: action.payload.msg,
+    };
+  }
   if (action.type === "EDIT_FINANCE_BEGIN") {
     return { ...state, isLoading: true };
   }
@@ -192,8 +213,8 @@ const reducer = (state, action) => {
   if (action.type === "SET_PAGE") {
     return {
       ...state,
-      page: action.payload.pageNumber
-    }
+      page: action.payload.pageNumber,
+    };
   }
 
   throw new Error(`no such action: ${action.type}`);

@@ -6,11 +6,13 @@ import {
   getAllFinances,
   updateFinance,
   deleteFinance,
-  showStats,
 } from "../controllers/financesController.js";
+import testUser from "../middleware/testUser.js";
 
-router.route("/").post(createFinance).get(getAllFinances);
-router.route("/stats").get(showStats);
-router.route("/:id").delete(deleteFinance).patch(updateFinance);
+router.route("/").post(testUser, createFinance).get(getAllFinances);
+router
+  .route("/:id")
+  .delete(testUser, deleteFinance)
+  .patch(testUser, updateFinance);
 
 export default router;

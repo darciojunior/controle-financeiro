@@ -1,4 +1,4 @@
-import React, { useReducer, useContext } from "react";
+import React, { useReducer, useContext, useEffect } from "react";
 import axios from "axios";
 import {
   DISPLAY_ALERT,
@@ -20,16 +20,16 @@ import {
   GET_FINANCES_SUCCESS,
   SET_EDIT_FINANCE,
   DELETE_FINANCE_BEGIN,
+  DELETE_FINANCE_ERROR,
   EDIT_FINANCE_BEGIN,
   EDIT_FINANCE_SUCCESS,
   EDIT_FINANCE_ERROR,
   CLEAR_FILTERS,
   SET_PAGE,
+  GET_CURRENT_USER_BEGIN,
+  GET_CURRENT_USER_SUCCESS,
 } from "./actions";
 import reducer from "./reducer";
-
-const user = localStorage.getItem("user");
-const token = localStorage.getItem("token");
 
 function formatDate(date) {
   var d = new Date(date),
@@ -45,11 +45,11 @@ function formatDate(date) {
 
 const initialState = {
   isLoading: false,
+  userLoading: true,
   showAlert: false,
   alertText: "",
   alertType: "",
-  user: user ? JSON.parse(user) : null,
-  token: token,
+  user: null,
   showSidebar: false,
   isEditing: false,
   editFinanceId: "",
@@ -93,16 +93,8 @@ const AppProvider = ({ children }) => {
   const authFetch = axios.create({
     baseURL: "/api/v1",
   });
+
   //interceptors
-  authFetch.interceptors.request.use(
-    (config) => {
-      config.headers["Authorization"] = `Bearer ${state.token}`;
-      return config;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
   authFetch.interceptors.response.use(
     (response) => {
       return response;
@@ -124,16 +116,6 @@ const AppProvider = ({ children }) => {
     }, 2000);
   };
 
-  const addUserToLocalStorage = ({ user, token }) => {
-    localStorage.setItem("user", JSON.stringify(user));
-    localStorage.setItem("token", token);
-  };
-
-  const removeUserFromLocalStorage = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-  };
-
   const setupUser = async ({ currentUser, endpoint, alertText }) => {
     dispatch({ type: SETUP_USER_BEGIN });
     try {
@@ -141,12 +123,11 @@ const AppProvider = ({ children }) => {
         `/api/v1/auth/${endpoint}`,
         currentUser
       );
-      const { user, token } = data;
+      const { user } = data;
       dispatch({
         type: SETUP_USER_SUCCESS,
-        payload: { user, token, alertText },
+        payload: { user, alertText },
       });
-      addUserToLocalStorage({ user, token });
     } catch (error) {
       dispatch({
         type: SETUP_USER_ERROR,
@@ -160,18 +141,17 @@ const AppProvider = ({ children }) => {
     dispatch({ type: TOGGLE_SIDEBAR });
   };
 
-  const logoutUser = () => {
+  const logoutUser = async () => {
+    await authFetch.get("/auth/logout");
     dispatch({ type: LOGOUT_USER });
-    removeUserFromLocalStorage();
   };
 
   const updateUser = async (currentUser) => {
     dispatch({ type: UPDATE_USER_BEGIN });
     try {
       const { data } = await authFetch.patch("/auth/updateUser", currentUser);
-      const { user, token } = data;
-      dispatch({ type: UPDATE_USER_SUCCESS, payload: { user, token } });
-      addUserToLocalStorage({ user, token });
+      const { user } = data;
+      dispatch({ type: UPDATE_USER_SUCCESS, payload: { user } });
     } catch (error) {
       if (error.response.status !== 401) {
         dispatch({
@@ -299,8 +279,13 @@ const AppProvider = ({ children }) => {
       await authFetch.delete(`/finances/${id}`);
       getFinances();
     } catch (error) {
-      logoutUser();
+      if (error.response.status === 401) return;
+      dispatch({
+        type: DELETE_FINANCE_ERROR,
+        payload: { msg: error.response.data },
+      });
     }
+    clearAlert();
   };
 
   const clearFilters = () => {
@@ -310,6 +295,23 @@ const AppProvider = ({ children }) => {
   const setPage = (pageNumber) => {
     dispatch({ type: SET_PAGE, payload: { pageNumber } });
   };
+
+  const getCurrentUser = async () => {
+    dispatch({ type: GET_CURRENT_USER_BEGIN });
+    try {
+      const { data } = await authFetch("/auth/getCurrentUser");
+      const { user } = data;
+      dispatch({ type: GET_CURRENT_USER_SUCCESS, payload: { user } });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      logoutUser();
+    }
+  };
+
+  useEffect(() => {
+    getCurrentUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <AppContext.Provider

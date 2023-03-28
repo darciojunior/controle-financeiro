@@ -1,27 +1,33 @@
-import main from '../assets/images/main.svg'
+import React from 'react'
+import { Link, Navigate } from 'react-router-dom'
 import styled from 'styled-components'
-import {Logo} from '../components'
-import { Link } from 'react-router-dom'
+import main from '../assets/images/main.svg'
+import { Logo } from '../components'
+import { useAppContext } from '../context/appContext'
 
 const Landing = () => {
-    return (
-        <Wrapper>
-            <nav>
-                <Logo />
-            </nav>
-            <div className="container page">
-                <div className="info">
-                    <h1>Sistema de controle financeiro</h1>
-                    <p>
-                        Projeto de um sistema de controle financeiro feito apenas para praticar a stack MERN, o objetivo é ter um sistema completo,
-                        com criação de usuários, adicionar e remover receitas e gastos e também acessar um resumo dos gastos mensais.
-                    </p>
-                    <Link to='/register' className='btn btn-login'>Login/Register</Link>
-                </div>
-                <img src={main} alt="" className='img main-img' />
-            </div>
-        </Wrapper>
-    )
+  const { user } = useAppContext()
+  return (
+    <React.Fragment>
+      {user && <Navigate to='/' />}
+      <Wrapper>
+        <nav>
+          <Logo />
+        </nav>
+        <div className="container page">
+          <div className="info">
+            <h1>Sistema de controle financeiro</h1>
+            <p>
+              Projeto de um sistema de controle financeiro feito apenas para praticar a stack MERN, o objetivo é ter um sistema completo,
+              com criação de usuários, adicionar e remover receitas e gastos e também acessar um resumo dos gastos mensais.
+            </p>
+            <Link to='/register' className='btn btn-login'>Login/Register</Link>
+          </div>
+          <img src={main} alt="" className='img main-img' />
+        </div>
+      </Wrapper>
+    </React.Fragment>
+  )
 }
 
 const Wrapper = styled.main`

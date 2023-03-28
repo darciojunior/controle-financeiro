@@ -52,6 +52,9 @@ const Register = () => {
         <FormRow type='email' name='email' labelText='E-mail' value={values.email} handleChange={handleChange} />
         <FormRow type='password' name='password' labelText='Senha' value={values.password} handleChange={handleChange} />
         <button type="submit" className="btn" disabled={isLoading}>Enviar</button>
+        <button type='button' className="btn test-user-btn" onClick={() => {
+          setupUser({ currentUser: { email: 'demo@test.com', password: 'demouser' }, endpoint: 'login', alertText: "Login realizado com sucesso. Redirecionando..." })
+        }}>{isLoading ? 'Carregando..' : 'Usuário teste'}</button>
         <p>
           {values.isMember ? 'Não é membro? ' : 'Já tem cadastro? '}
           <button type="button" onClick={toggleMember} className='member-btn'>{values.isMember ? 'Cadastrar' : 'Login'}</button>
@@ -90,6 +93,10 @@ const Wrapper = styled.section`
     height: 35px;
     background-color: #0C380C;
     color: #FFF;
+  }
+  .test-user-btn {
+    background-color: #a6f7a6;
+    color: #187a18;
   }
   .member-btn {
     background: transparent;

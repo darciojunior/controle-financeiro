@@ -70,14 +70,4 @@ const deleteFinance = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: "Sucesso. Finança removida." });
 };
 
-const showStats = async (req, res) => {
-  res.send("show stats");
-};
-
-export {
-  createFinance,
-  getAllFinances,
-  updateFinance,
-  deleteFinance,
-  showStats,
-};
+export { createFinance, getAllFinances, updateFinance, deleteFinance };
