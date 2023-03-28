@@ -21,7 +21,7 @@ const Landing = () => {
               Projeto de um sistema de controle financeiro feito apenas para praticar a stack MERN, o objetivo é ter um sistema completo,
               com criação de usuários, adicionar e remover receitas e gastos e também acessar um resumo dos gastos mensais.
             </p>
-            <Link to='/register' className='btn btn-login'>Login/Register</Link>
+            <Link to='/register' className='btn btn-login'>Login/Cadastrar</Link>
           </div>
           <img src={main} alt="" className='img main-img' />
         </div>
