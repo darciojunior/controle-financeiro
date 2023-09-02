@@ -190,6 +190,7 @@ const AppProvider = ({ children }) => {
         financeValue,
         financeDate,
       });
+      getFinances()
       dispatch({ type: CREATE_FINANCE_SUCCESS });
       dispatch({ type: CLEAR_VALUES });
     } catch (error) {
