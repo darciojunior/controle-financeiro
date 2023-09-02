@@ -261,6 +261,7 @@ const AppProvider = ({ children }) => {
           description,
         });
       }
+      getFinances()
       dispatch({ type: EDIT_FINANCE_SUCCESS });
       dispatch({ type: CLEAR_VALUES });
     } catch (error) {
